@@ -32,20 +32,26 @@ public class Julia implements Fractal {
 			for (int x = 0; x < this.width; x++) {
 				for (int y = 0; y < this.height; y++) {
 
-					Complex z = new Complex(1.2 * (x - width / 2) / (width / 2), 1.69 * (y-height / 2) / (height / 2));
+					Complex z = new Complex(1.8 * (x - width / 2) / (width / 2), 1.69 * (y - height / 2) / (height / 2));
 					int i;
 
 					for (i = 0; i < this.maxIter; i++) {
-						Complex zOfF = z.pow(2.0).add(constant);
+						z = z.pow(2.0).add(constant);
 
-						if (zOfF.abs() > this.radius)
+						if (z.abs() > this.radius)
 							break;
 					}
 
 					float s = 0.8f;
 					float b = i < maxIter ? 1f : 0;
-	        float h = (float) (i * x * y);
-	        Color color = Color.getHSBColor(h, s, b);
+	        float h = 1.0f * ((float) i / maxIter);
+
+					float hueVal = (float) (h - Math.floor(h)) * 360;
+
+					if (hueVal < 30) //if it's red
+						h += 0.78f; //make it purple
+
+	        Color color = new Color(Color.HSBtoRGB(h, s, b));
 	        image.setRGB(x, y, color.getRGB());
 				}
 			}
