@@ -1,3 +1,5 @@
+package Fractales;
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import org.apache.commons.math3.complex.Complex;
