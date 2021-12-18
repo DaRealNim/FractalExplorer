@@ -71,6 +71,7 @@ import org.apache.commons.math3.util.FastMath;
  * @deprecated to be removed in version 4.0 -
  *  use {@link org.apache.commons.math3.stat.inference.KolmogorovSmirnovTest}
  */
+ @Deprecated
 public class KolmogorovSmirnovDistribution implements Serializable {
 
     /** Serializable version identifier. */
