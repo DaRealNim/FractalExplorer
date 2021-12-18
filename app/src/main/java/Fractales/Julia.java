@@ -7,6 +7,9 @@ import java.lang.Math;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.File;
+import javafx.util.Pair;
+import java.util.List;
+import java.util.ArrayList;
 
 
 public class Julia implements Fractal {
@@ -29,39 +32,64 @@ public class Julia implements Fractal {
 	}
 
 	public void drawFractal() {
+			List<Pair<Integer, Integer>> xyPairs = new ArrayList<>();
+
 			for (int x = 0; x < this.width; x++) {
 				for (int y = 0; y < this.height; y++) {
-
-					Complex z = new Complex(1.8 * (x - width / 2) / (width / 2), 1.69 * (y - height / 2) / (height / 2));
-					int i;
-
-					for (i = 0; i < this.maxIter; i++) {
-						z = z.pow(2.0).add(constant);
-
-						if (z.abs() > this.radius)
-							break;
-					}
-
-					float s = 0.8f;
-					float b = i < maxIter ? 1f : 0;
-	        float h = 1.0f * ((float) i / maxIter);
-
-					float hueVal = (float) (h - Math.floor(h)) * 360;
-
-					if (hueVal < 30) //if it's red
-						h += 0.78f; //make it purple
-
-	        Color color = new Color(Color.HSBtoRGB(h, s, b));
-	        image.setRGB(x, y, color.getRGB());
+					xyPairs.add(new Pair(x, y));
 				}
 			}
 
-			try {
-				ImageIO.write(image, "PNG", new File("julia.png"));
-			}
-			catch (IOException e) {
-					e.printStackTrace();
-			}
+			xyPairs.parallelStream().forEach(p -> colorImage(p));
+	}
+
+	public void colorImage(Pair<Integer, Integer> p)
+	{
+		int iterations = escapeOrbit(p);
+
+		if (iterations >= maxIter)
+			image.setRGB(p.getKey(), p.getValue(), 0);
+		else
+		{
+			float hue = (float) iterations / maxIter;
+
+			/*
+			//This parts just forbids the color red, remove it for performance.
+			float codedHue = (float) (hue - Math.floor(hue)) * 360;
+			if (codedHue < 30) //if it's red
+				hue += 0.78f; //make it purple
+				*/
+			Color c = new Color(Color.HSBtoRGB(hue, 0.8f, 1f));
+			image.setRGB(p.getKey(), p.getValue(), c.getRGB());
+		}
+	}
+
+	public int escapeOrbit(Pair<Integer, Integer> p)
+	{
+		int x = p.getKey();
+		int y = p.getValue();
+
+		Complex z = new Complex(1.8 * (x - width / 2) / (width / 2), 1.69 * (y - height / 2) / (height / 2));
+		int i;
+
+		for (i = 0; i < maxIter; i++) {
+			z = z.pow(2.0).add(constant);
+
+			if (z.abs() > radius)
+				return(i);
+		}
+
+		return(maxIter);
+	}
+
+	public void saveImage()
+	{
+		try {
+		ImageIO.write(image, "PNG", new File("julia.png"));
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public BufferedImage getImage()

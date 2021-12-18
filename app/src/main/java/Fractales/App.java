@@ -15,8 +15,9 @@ public class App {
             Application.launch(GraphicalApp.class);
         } else {
             System.out.println("Command line version");
-            Julia julia = new Julia(800, 600, 20, -0.4, 0.6, 2);
+            Julia julia = new Julia(800, 600, 20, -0.70176, -0.3842, 2);
             julia.drawFractal();
+						julia.saveImage();
         }
     }
 }
