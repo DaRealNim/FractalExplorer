@@ -13,13 +13,13 @@ import java.util.ArrayList;
 
 
 public class Julia implements Fractal {
-	private BufferedImage image;
-	private int width;
-	private int height;
+	protected BufferedImage image;
+	protected int width;
+	protected int height;
 
-	private final Complex constant;
-	private int maxIter;
-	private int radius;
+	protected final Complex constant;
+	protected int maxIter;
+	protected int radius;
 
 	public Julia(int w, int h, int max, double real, double imaginary, int r) {
 		this.width = w;

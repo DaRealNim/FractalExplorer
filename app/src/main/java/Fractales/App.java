@@ -83,8 +83,9 @@ public class App {
         } else {
             System.out.println("Command line version");
             Julia julia = new Julia(800, 600, 20, -0.70176, -0.3842, 2);
-            julia.drawFractal();
-			julia.saveImage();
+						Mandelbrot mdb = new Mandelbrot(800, 600, 1000, 2);
+						mdb.drawFractal();
+						mdb.saveImage();
         }
     }
 }
