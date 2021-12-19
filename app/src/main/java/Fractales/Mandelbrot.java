@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.ArrayList;
 
 
-public class Mandelbrot extends Julia {
+public class Mandelbrot extends Fractal {
 	public Mandelbrot(int w, int h, int max, int r) {
-		super(w, h, max, 0, 0, r);
+		super(w, h, max, r);
 	}
 
 	@Override
