@@ -14,6 +14,10 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import org.apache.commons.math3.complex.Complex;
+
 
 
 public class GraphicalApp extends Application {
@@ -25,11 +29,12 @@ public class GraphicalApp extends Application {
 
         Button juliaButton = createButton("Julia Set", "button");
         Button mandelbrotButton = createButton("Mandelbrot Set", "button");
+        juliaButton.setOnAction(e -> spawnJuliaFractal());
+        mandelbrotButton.setOnAction(e -> spawnMdbFractal());
 
         HBox hButtons = new HBox(8);
         hButtons.setAlignment(Pos.CENTER);
         hButtons.getChildren().addAll(juliaButton, mandelbrotButton);
-
 
         Text title = new Text("very menu much wow many fractal");
         title.setFont(new Font(36));
@@ -42,6 +47,24 @@ public class GraphicalApp extends Application {
         Scene scene = new Scene(mainPane, width, height, Color.BEIGE);
         scene.getStylesheets().add("buttonStylesheet.css");
 
+        stage.setScene(scene);
+        stage.setTitle("Fractal Viewer");
+        stage.show();
+    }
+
+    private void spawnJuliaFractal()
+    {
+        //get function value from text input, parse it to create appropriate values for fractal.
+        Julia julia = new Julia(new Complex(1.0), new Complex(1.0), new Complex(1.0), 2.0, 256, 2);
+        BufferedImage jImage = julia.drawFractal();
+        Image img = Renderer.convertToFxImage(jImage);
+
+        //create scene in displayFractal
+    }
+
+    private void displayFractal(Image img)
+    {
+        //scene here
         ParallelCamera camera = new ParallelCamera();
         scene.setCamera(camera);
 
@@ -59,14 +82,9 @@ public class GraphicalApp extends Application {
                 camera.setTranslateY(camera.getTranslateY() + 20);
             }
         });
-
-
-        stage.setScene(scene);
-        stage.setTitle("Fractal Viewer");
-        stage.show();
     }
 
-    public Button createButton(String text, String styleClass)
+    private Button createButton(String text, String styleClass)
     {
         Button newButton = new Button();
 

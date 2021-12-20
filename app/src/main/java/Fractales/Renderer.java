@@ -45,8 +45,7 @@ public class Renderer {
         return (img);
     }
 
-    public static void colorPixel(BufferedImage img, final Fractal f, Pair<Integer, Integer> p)
-    {
+    private static void colorPixel(BufferedImage img, final Fractal f, Pair<Integer, Integer> p) {
         final double step = f.getStep();
         int x = p.getKey();
         int y = p.getValue();
@@ -58,12 +57,15 @@ public class Renderer {
         img.setRGB(x, y, color.getRGB());
     }
 
-    public static void saveToFile(final String filename, BufferedImage image)
-    {
+    public static void saveToFile(final String filename, BufferedImage image) {
         try {
             ImageIO.write(image, "PNG", new File(filename + ".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+    }
+
+    public static Image convertToFxImage(BufferedImage image) {
+        return (SwingFXUtils.toFXImage(image, null));
     }
 }
