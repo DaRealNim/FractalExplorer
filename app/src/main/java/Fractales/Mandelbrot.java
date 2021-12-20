@@ -13,20 +13,22 @@ import java.util.ArrayList;
 
 
 public class Mandelbrot extends Fractal {
-	public Mandelbrot(int w, int h, int max, int r) {
-		super(w, h, max, r);
+
+	public Mandelbrot(Complex p1, Complex p2, double step, int max, int r) {
+		super(p1, p2, step, max, r);
+	}
+
+	public Mandelbrot(Complex p1, Complex p2, int screenSize, int max, int r) {
+		super(p1, p2, screenSize, max, r);
 	}
 
 	@Override
-	public int escapeOrbit(Pair<Integer, Integer> p)
+	public int escapeOrbit(Complex z)
 	{
-		int x = p.getKey();
-		int y = p.getValue();
-
-		Complex z = new Complex(1.8 * (x - width / 2) / (width / 2), 1.69 * (y - height / 2) / (height / 2));
 		Complex c = z;
-
 		int i = 0;
+
+
 	 	while (i < maxIter && z.abs() < radius) {
 			z = z.pow(2.0).add(c);
 			i++;
@@ -35,13 +37,12 @@ public class Mandelbrot extends Fractal {
 		return(i);
 	}
 
-	public void saveImage()
-	{
-		try {
-		ImageIO.write(image, "PNG", new File("mandelbrot.png"));
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+	public Mandelbrot zoomed(double factor) {
+		System.out.println("Keeping screen size of "+screenSize);
+		return new Mandelbrot(p1.multiply(factor), p2.multiply(factor), screenSize, maxIter, radius);
+	}
+
+	public String getName() {
+		return "mandelbrot";
 	}
 }

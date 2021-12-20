@@ -34,6 +34,7 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @see MathArrays
  *
  */
+@SuppressWarnings( "removal" )
 public final class MathUtils {
     /**
      * \(2\pi\)

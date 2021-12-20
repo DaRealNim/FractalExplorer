@@ -15,22 +15,23 @@ import java.util.ArrayList;
 public class Julia extends Fractal {
 	protected final Complex constant;
 
-	public Julia(int w, int h, int max, double real, double imaginary, int r) {
-		super(w, h, max, r);
-		this.constant = new Complex(real, imaginary);
+	public Julia(Complex p1, Complex p2, Complex constant, double step, int max, int r) {
+		super(p1, p2, step, max, r);
+		this.constant = constant;
 	}
 
-	public int escapeOrbit(Pair<Integer, Integer> p)
-	{
-		int x = p.getKey();
-		int y = p.getValue();
+	public Julia(Complex p1, Complex p2, Complex constant, int screenSize, int max, int r) {
+		super(p1, p2, screenSize, max, r);
+		this.constant = constant;
+	}
 
-		Complex z = new Complex(1.8 * (x - width / 2) / (width / 2), 1.69 * (y - height / 2) / (height / 2));
+	@Override
+	public int escapeOrbit(Complex z)
+	{
 		int i;
 
 		for (i = 0; i < maxIter; i++) {
 			z = z.pow(2.0).add(constant);
-
 			if (z.abs() > radius)
 				return(i);
 		}
@@ -38,15 +39,12 @@ public class Julia extends Fractal {
 		return(maxIter);
 	}
 
-	public void saveImage()
-	{
-		try {
-		ImageIO.write(image, "PNG", new File("julia.png"));
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+	public Julia zoomed(double factor) {
+		return new Julia(p1.multiply(factor), p2.multiply(factor), constant, screenSize, maxIter, radius);
 	}
 
+	public String getName() {
+		return "julia";
+	}
 
 }

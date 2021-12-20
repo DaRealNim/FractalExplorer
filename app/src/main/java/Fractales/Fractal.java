@@ -14,60 +14,52 @@ import java.util.ArrayList;
 
 public abstract class Fractal
 {
-	protected BufferedImage image;
-	protected int width;
-	protected int height;
 
+	protected Complex p1, p2;
 	protected int maxIter;
 	protected int radius;
+	protected Double step;
+	protected Integer screenSize;
 
-	public Fractal(int w, int h, int max, int r) {
-		this.width = w;
-		this.height = h;
-		this.image = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
-
+	public Fractal(Complex p1, Complex p2, double step, int max, int r) {
+		this.p1 = p1;
+		this.p2 = p2;
 		this.maxIter = max;
 		this.radius = r;
+		this.step = step;
+		this.screenSize = (int)(Math.abs(p2.getReal() - p1.getReal()) / step);
 	}
 
-	public void drawFractal() {
-			List<Pair<Integer, Integer>> xyPairs = new ArrayList<>();
-
-			for (int x = 0; x < this.width; x++) {
-				for (int y = 0; y < this.height; y++) {
-					xyPairs.add(new Pair(x, y));
-				}
-			}
-
-			xyPairs.parallelStream().forEach(p -> colorImage(p));
+	public Fractal(Complex p1, Complex p2, int screenSize, int max, int r) {
+		this.p1 = p1;
+		this.p2 = p2;
+		this.maxIter = max;
+		this.radius = r;
+		this.screenSize = screenSize;
+		this.step = Math.abs(p2.getReal() - p1.getReal()) / screenSize;
 	}
 
-	public void colorImage(Pair<Integer, Integer> p)
-	{
-		int iterations = escapeOrbit(p);
-
-		if (iterations >= maxIter)
-			image.setRGB(p.getKey(), p.getValue(), 0);
-		else
-		{
-			float hue = (float) iterations / maxIter;
-
-			/*
-			//This parts just forbids the color red, remove it for performance.
-			float codedHue = (float) (hue - Math.floor(hue)) * 360;
-			if (codedHue < 30) //if it's red
-				hue += 0.78f; //make it purple
-				*/
-			Color c = new Color(Color.HSBtoRGB(hue, 0.8f, 1f));
-			image.setRGB(p.getKey(), p.getValue(), c.getRGB());
-		}
+	public int getMaxIter() {
+		return maxIter;
 	}
 
-	public BufferedImage getImage()
-	{
-		return(this.image);
+	public Complex getRectStart() {
+		return p1;
 	}
 
-	public void saveImage();
-	public int escapteOrbit(Pair p);
+	public Complex getRectEnd() {
+		return p2;
+	}
+
+	public double getStep() {
+		return step;
+	}
+
+	public int getScreenSize() {
+		return screenSize;
+	}
+
+	public abstract int escapeOrbit(Complex z);
+	public abstract <T extends Fractal> T zoomed(double factor);
+	public abstract String getName();
 }
