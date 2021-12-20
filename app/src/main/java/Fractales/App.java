@@ -215,7 +215,7 @@ public class App {
                 break;
             }
 
-            Renderer.drawFractalInFile(frac, (filename.isEmpty() ? frac.getName() : filename));
+            Renderer.saveToFile(filename.isEmpty() ? frac.getName() : filename, Renderer.drawFractal(frac));
 
 			// Mandelbrot mdb = new Mandelbrot(800, 600, 1000, 2);
 

@@ -28,9 +28,8 @@ public class Renderer {
 		return c;
     }
 
-    public static void drawFractalInFile(final Fractal fractal, final String filename) {
+    public static BufferedImage drawFractal(final Fractal fractal) {
         final int sz = fractal.getScreenSize();
-        final double step = fractal.getStep();
 
         final BufferedImage img = new BufferedImage(sz, sz, BufferedImage.TYPE_3BYTE_BGR);
         List<Pair<Integer, Integer>> xyPairs = new ArrayList<>();
@@ -41,22 +40,30 @@ public class Renderer {
 			}
 		}
 
-        xyPairs.parallelStream().forEach(p -> {
-            int x = p.getKey();
-            int y = p.getValue();
-            Complex c = fractal.getRectStart().add(new Complex(x*step, y*step));
-            int value = fractal.escapeOrbit(c);
-            Color color = getColorOfValue(value, fractal.getMaxIter());
-            img.setRGB(x, y, color.getRGB());
-        });
+        xyPairs.parallelStream().forEach(p -> colorPixel(img, fractal, p));
 
+        return (img);
+    }
+
+    public static void colorPixel(BufferedImage img, final Fractal f, Pair<Integer, Integer> p)
+    {
+        final double step = f.getStep();
+        int x = p.getKey();
+        int y = p.getValue();
+
+        Complex c = f.getRectStart().add(new Complex(x*step, y*step));
+
+        int value = f.escapeOrbit(c);
+        Color color = getColorOfValue(value, f.getMaxIter());
+        img.setRGB(x, y, color.getRGB());
+    }
+
+    public static void saveToFile(final String filename, BufferedImage image)
+    {
         try {
-            ImageIO.write(img, "PNG", new File(filename + ".png"));
+            ImageIO.write(image, "PNG", new File(filename + ".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
     }
-
-
-
 }
