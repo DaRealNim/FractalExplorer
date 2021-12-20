@@ -8,8 +8,10 @@ import java.util.List;
 import java.util.ArrayList;
 import javafx.util.Pair;
 import javax.imageio.ImageIO;
-
+import javafx.embed.swing.*;
 import org.apache.commons.math3.complex.Complex;
+import javafx.scene.image.Image;
+
 
 
 public class Renderer {

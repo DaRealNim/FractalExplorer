@@ -17,6 +17,8 @@ import javafx.scene.text.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.apache.commons.math3.complex.Complex;
+import java.awt.image.BufferedImage;
+
 
 
 
@@ -56,15 +58,27 @@ public class GraphicalApp extends Application {
     {
         //get function value from text input, parse it to create appropriate values for fractal.
         Julia julia = new Julia(new Complex(1.0), new Complex(1.0), new Complex(1.0), 2.0, 256, 2);
-        BufferedImage jImage = julia.drawFractal();
+        BufferedImage jImage = Renderer.drawFractal(julia);
         Image img = Renderer.convertToFxImage(jImage);
 
         //create scene in displayFractal
     }
 
+    private void spawnMdbFractal()
+    {
+        //get function value from text input, parse it to create appropriate values for fractal.
+        Mandelbrot mdb = new Mandelbrot(new Complex(1.0), new Complex(1.0), 2.0, 256, 2);
+        BufferedImage jImage = Renderer.drawFractal(mdb);
+        Image img = Renderer.convertToFxImage(jImage);
+
+        //create scene in displayFractal
+    }
+
+
     private void displayFractal(Image img)
     {
         //scene here
+        /*
         ParallelCamera camera = new ParallelCamera();
         scene.setCamera(camera);
 
@@ -81,7 +95,7 @@ public class GraphicalApp extends Application {
             if (event.getCode() == KeyCode.DOWN) {
                 camera.setTranslateY(camera.getTranslateY() + 20);
             }
-        });
+        });*/
     }
 
     private Button createButton(String text, String styleClass)
