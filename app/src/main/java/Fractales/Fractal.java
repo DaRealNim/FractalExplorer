@@ -45,6 +45,10 @@ public abstract class Fractal
 		this.step = Math.abs(p2.getReal() - p1.getReal()) / screenSize;
 	}
 
+	public void setMaxIterations(int maxIter) {
+		this.maxIter = maxIter;
+	}
+
 	public int getMaxIter() {
 		return maxIter;
 	}

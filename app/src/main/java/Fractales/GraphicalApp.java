@@ -25,6 +25,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -32,10 +33,12 @@ import org.apache.commons.math3.complex.Complex;
 
 
 public class GraphicalApp extends Application {
-    // int canvasSize;
-    // Scene scene;
 
     Fractal currentlyDisplayed;
+    int zoomX;
+    int zoomY;
+
+    private final int SIZE = 800;
 
     // public GraphicalApp(int size) {
     //     super();
@@ -67,21 +70,41 @@ public class GraphicalApp extends Application {
         return null;
     }
 
+    private void updateComplexRectangleFields(TextField x1Field,
+                                              TextField y1Field,
+                                              TextField x2Field,
+                                              TextField y2Field)
+    {
+        x1Field.setText(""+currentlyDisplayed.getRectStart().getReal());
+        y1Field.setText(""+currentlyDisplayed.getRectStart().getImaginary());
+        x2Field.setText(""+currentlyDisplayed.getRectEnd().getReal());
+        y2Field.setText(""+currentlyDisplayed.getRectEnd().getImaginary());
+    }
+
+    private int getIterationsFromInput(TextField field) {
+        try {
+            return Integer.parseInt(field.getText());
+        } catch (NumberFormatException e) {}
+        return -1;
+    }
+
     @Override
     public void start(Stage stage) {
-        int size = 800;
 
         //Panels principaux : zone de la fractale, et panel de contrôle
         HBox mainPane = new HBox();
-        Canvas fractalCanvas = new Canvas(800, 800);
+        Canvas fractalCanvas = new Canvas(SIZE, SIZE);
+        Canvas lineCanvas = new Canvas(SIZE, SIZE);
+        // lineCanvas.setStyle("fx-background-color: transparent;");
+
         GridPane controlPane = new GridPane();
-        Scene scene = new Scene(mainPane, size+400, size, Color.BEIGE);
+        Scene scene = new Scene(mainPane, SIZE+400, SIZE, Color.BEIGE);
 
         scene.getStylesheets().add("style.css");
-        controlPane.setMinSize(400, 800);
+        controlPane.setMinSize(400, SIZE);
 
         GraphicsContext gc = fractalCanvas.getGraphicsContext2D();
-        // spawnJuliaFractal();
+        GraphicsContext lineGC = lineCanvas.getGraphicsContext2D();
 
         // Elements du panel de contrôle
         // Titre
@@ -128,11 +151,11 @@ public class GraphicalApp extends Application {
         // Zone exploration de la fractale
         Text exploreTitle = newText("Explore current fractal", "subTitleText");
 
-        Text displayedRectangleTitle = newText("Currently displayed rectangle", "subSubTitleText");
+        Text displayedRectangleTitle = newText("Complex rectangle", "subSubTitleText");
         TextField firstPointRealField = new TextField("-2");
-        TextField firstPointImaginaryField = new TextField("-2");
+        TextField firstPointImaginaryField = new TextField("2");
         TextField secondPointRealField = new TextField("2");
-        TextField secondPointImaginaryField = new TextField("2");
+        TextField secondPointImaginaryField = new TextField("-2");
         HBox firstPointInput = new HBox(3);
         firstPointInput.getChildren().addAll(newText("z1 = "), firstPointRealField, newText(" + i*"), firstPointImaginaryField);
         HBox secondPointInput = new HBox(3);
@@ -142,7 +165,10 @@ public class GraphicalApp extends Application {
         VBox displayedRectanglePanel = new VBox(3);
         displayedRectanglePanel.getChildren().addAll(displayedRectangleTitle,
                                                      rectanglePointsInputs);
-        Button jumpButton = new Button("Set rectangle");
+        // Button jumpButton = new Button("Set rectangle");
+        Button resetButton = new Button("Reset rectangle");
+        // HBox rectButtonsPane = new HBox(3);
+        // rectButtonsPane.getChildren().addAll(resetButton);
 
         Text movementTitle = newText("Move inside fractal", "subSubTitleText");
         Button upButton = new Button("↑");
@@ -151,10 +177,6 @@ public class GraphicalApp extends Application {
         Button rightButton = new Button("→");
         Button zoomInButton = new Button("Zoom +");
         Button zoomOutButton = new Button("Zoom -");
-        // upButton.setMaxWidth(Double.MAX_VALUE);
-        // downButton.setMaxWidth(Double.MAX_VALUE);
-        // leftButton.setMaxWidth(Double.MAX_VALUE);
-        // rightButton.setMaxWidth(Double.MAX_VALUE);
         zoomInButton.setMaxWidth(Double.MAX_VALUE);
         zoomOutButton.setMaxWidth(Double.MAX_VALUE);
         VBox movementPane = new VBox(3);
@@ -168,7 +190,7 @@ public class GraphicalApp extends Application {
         HBox mvtAndZoomPane = new HBox(50);
         mvtAndZoomPane.getChildren().addAll(movementButtonsPane, zoomButtonsPane);
         mvtAndZoomPane.setStyle("-fx-padding: 30 0 0 0;");
-        movementPane.getChildren().addAll(movementTitle, mvtAndZoomPane);
+        movementPane.getChildren().addAll(mvtAndZoomPane);
 
         controlPane.addColumn(0, titleText,
                                  new Separator(),
@@ -176,79 +198,93 @@ public class GraphicalApp extends Application {
                                  fractalTypeButtonsPane,
                                  juliaConstantInputPanel,
                                  iterationsPanel,
+                                 displayedRectanglePanel,
+                                 resetButton,
                                  generateButton,
                                  new Separator(),
                                  exploreTitle,
-                                 displayedRectanglePanel,
-                                 jumpButton,
                                  movementPane
 
         );
         controlPane.setHalignment(titleText, HPos.CENTER);
+        controlPane.setHalignment(resetButton, HPos.RIGHT);
         controlPane.setStyle("-fx-background-color: #EEEEEE");
         controlPane.setPadding(new Insets(10,50,10,50));
         controlPane.setVgap(15);
 
         generateButton.setOnAction(event -> {
             Fractal frac = null;
-
+            int maxIter = getIterationsFromInput(iterField);
+            if (maxIter <= 0)
+                return;
+            Pair<Complex, Complex> rect = getComplexRectangleFromInputs(firstPointRealField,
+                                                                        firstPointImaginaryField,
+                                                                        secondPointRealField,
+                                                                        secondPointImaginaryField);
             if(juliaRadio.isSelected()) {
-                frac = new Julia(new Complex(-2, 2), new Complex(2, -2), new Complex(-0.70176, -0.3842), 800, 200, 2);
+                frac = new Julia(rect.getKey(), rect.getValue(), new Complex(-0.70176, -0.3842), SIZE, maxIter, 2);
             } else if (mandelRadio.isSelected()) {
-                frac = new Mandelbrot(new Complex(-2, 2), new Complex(2, -2), 800, 200, 2);
+                frac = new Mandelbrot(rect.getKey(), rect.getValue(), SIZE, maxIter, 2);
             }
             if (frac != null) {
-                firstPointRealField.setText("-2");
-                firstPointImaginaryField.setText("2");
-                secondPointRealField.setText("2");
-                secondPointImaginaryField.setText("-2");
                 currentlyDisplayed = frac;
                 renderFractal(gc);
             }
         });
 
-        jumpButton.setOnAction(event -> {
-            if (currentlyDisplayed != null) {
-                Pair<Complex, Complex> rect = getComplexRectangleFromInputs(firstPointRealField,
-                                                                            firstPointImaginaryField,
-                                                                            secondPointRealField,
-                                                                            secondPointImaginaryField);
-                if (rect != null) {
-                    currentlyDisplayed.setRectangle(rect);
-                    renderFractal(gc);
-                }
+        resetButton.setOnAction(event -> {
+            firstPointRealField.setText("-2");
+            firstPointImaginaryField.setText("2");
+            secondPointRealField.setText("2");
+            secondPointImaginaryField.setText("-2");
+        });
+
+        zoomInButton.setOnAction(event -> {
+            if(zoomX != -1 && zoomY != -1 && currentlyDisplayed != null) {
+                System.out.println("Zooming on "+zoomX+","+zoomY);
+                double step = currentlyDisplayed.getStep();
+                double deltaReal = zoomX*step;
+                double deltaImag = zoomY*step;
+                Complex newCenter = currentlyDisplayed.getRectStart().add(new Complex(deltaReal, -deltaImag));
+                System.out.println("new center: "+newCenter);
+                // double newZ1Real = newCenter.getReal() - (SIZE*step)/2;
+                // double newZ1Imag = newCenter.getImaginary() + (SIZE*step)/2;
+                Complex newZ1 = newCenter.add(new Complex(-(SIZE*step)/2, (SIZE*step)/2));
+                Complex newZ2 = newZ1.add(new Complex(SIZE*step, -SIZE*step));
+                // currentlyDisplayed.setRectangle(new Pair(new Complex(newZ1Real, newZ1Imag),
+                //                                          new Complex(newZ1Real+SIZE*step, newZ1Imag-SIZE*step))
+                // );
+                currentlyDisplayed.setRectangle(new Pair(newZ1, newZ2));
+                currentlyDisplayed = currentlyDisplayed.zoomed(0.85);
+                renderFractal(gc);
+                updateComplexRectangleFields(firstPointRealField, firstPointImaginaryField,
+                                             secondPointRealField, secondPointImaginaryField);
+                lineGC.clearRect(0, 0, SIZE, SIZE);
+                int zoomX = SIZE/2;
+                int zoomY = zoomX;
+                lineGC.strokeLine(0, zoomX, SIZE, zoomX);
+                lineGC.strokeLine(zoomX, 0, zoomX, SIZE);
             }
         });
 
-        mainPane.getChildren().addAll(fractalCanvas, new Separator(Orientation.VERTICAL), controlPane);
+        lineCanvas.setOnMouseReleased(event -> {
+            lineGC.clearRect(0, 0, SIZE, SIZE);
+            lineGC.setStroke(Color.GREY);
+            lineGC.strokeLine(0, (int)event.getY(), SIZE, (int)event.getY());
+            lineGC.strokeLine((int)event.getX(), 0, (int)event.getX(), SIZE);
+            zoomX = (int)event.getX();
+            zoomY = (int)event.getY();
+        });
 
-        gc.setFill(Color.BLACK);
-        gc.fillRect(0, 0, 100, 100);
+        StackPane fractalPane = new StackPane();
+        fractalPane.getChildren().addAll(fractalCanvas, lineCanvas);
+
+        mainPane.getChildren().addAll(fractalPane, new Separator(Orientation.VERTICAL), controlPane);
 
         stage.setScene(scene);
         stage.setTitle("Fractal Explorer");
         stage.setResizable(false);
         stage.show();
-
-        // ParallelCamera camera = new ParallelCamera();
-        // scene.setCamera(camera);
-        //
-        // scene.setOnKeyPressed(event -> {
-        //     if (event.getCode() == KeyCode.LEFT) {
-        //         camera.setTranslateX(camera.getTranslateX() - 20);
-        //     }
-        //     if (event.getCode() == KeyCode.RIGHT) {
-        //         camera.setTranslateX(camera.getTranslateX() + 20);
-        //     }
-        //     if (event.getCode() == KeyCode.UP) {
-        //         camera.setTranslateY(camera.getTranslateY() - 20);
-        //     }
-        //     if (event.getCode() == KeyCode.DOWN) {
-        //         camera.setTranslateY(camera.getTranslateY() + 20);
-        //     }
-        // });
-
-
     }
 
     private Text newText(String text) {

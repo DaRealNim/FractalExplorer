@@ -38,7 +38,6 @@ public class Mandelbrot extends Fractal {
 	}
 
 	public Mandelbrot zoomed(double factor) {
-		System.out.println("Keeping screen size of "+screenSize);
 		return new Mandelbrot(p1.multiply(factor), p2.multiply(factor), screenSize, maxIter, radius);
 	}
 
