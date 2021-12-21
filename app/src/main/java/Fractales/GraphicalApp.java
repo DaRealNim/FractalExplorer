@@ -47,9 +47,8 @@ public class GraphicalApp extends Application {
 
     private void renderFractal(GraphicsContext gc) {
         if (currentlyDisplayed != null) {
-            BufferedImage jImage = Renderer.drawFractal(currentlyDisplayed);
-            Image img = Renderer.convertToFxImage(jImage);
-            gc.drawImage(img, 0, 0);
+            Image img = Renderer.drawFractal(currentlyDisplayed);
+					  gc.drawImage(img, 0, 0);
         }
     }
 
