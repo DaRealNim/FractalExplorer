@@ -1,6 +1,8 @@
 package Fractales;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.stage.Stage;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.CommandLineParser;
@@ -120,7 +122,7 @@ public class App {
         );
         options.addOption(Option.builder("r")
                                 .longOpt("rectangle")
-                                .desc("Comma separated integers coordinates of start and end points of the rectangle to use in the complex plane to generate the fractal\nFor the rectangle defined by points x1+i*y1 and x2+i*y2, input \"x1,y1,x2,y2\"\nDefault is 0,0,800,600")
+                                .desc("Comma separated integers coordinates of start and end points of the rectangle to use in the complex plane to generate the fractal\nFor the rectangle defined by points x1+i*y1 and x2+i*y2, input \"x1,y1,x2,y2\"\nDefault is -2,-2,2,2")
                                 .type(String.class)
                                 .numberOfArgs(1)
                                 .build()
@@ -189,7 +191,23 @@ public class App {
         }
 
         if (cmd.hasOption("G")) {
+
             Application.launch(GraphicalApp.class);
+
+            /**** Possible solution to pass args to GraphicalApp ****/
+
+            // GraphicalApp gApp = new GraphicalApp(pixelSize);
+            // try {
+            //     gApp.init();
+            // } catch (Exception e) {
+            //     e.printStackTrace();
+            // }
+            //
+            // Platform.startup(() -> {
+            //     Stage stage = new Stage();
+            //     gApp.start(stage);
+            // });
+
         } else {
             Fractal frac = null;
             Complex p1 = new Complex(x1, y1);

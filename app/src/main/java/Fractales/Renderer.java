@@ -20,12 +20,7 @@ public class Renderer {
         if (value >= maxIter)
 			return Color.BLACK;
 		float hue = (float) value / maxIter;
-		/*
-		//This parts just forbids the color red, remove it for performance.
-		float codedHue = (float) (hue - Math.floor(hue)) * 360;
-		if (codedHue < 30) //if it's red
-			hue += 0.78f; //make it purple
-			*/
+
         Color c = Color.getHSBColor(hue, 0.8f, 1.0f);
 		return c;
     }
@@ -52,7 +47,7 @@ public class Renderer {
         int x = p.getKey();
         int y = p.getValue();
 
-        Complex c = f.getRectStart().add(new Complex(x*step, y*step));
+        Complex c = f.getRectStart().add(new Complex(x*step, -y*step));
 
         int value = f.escapeOrbit(c);
         Color color = getColorOfValue(value, f.getMaxIter());

@@ -1,0 +1,20 @@
+.titleText {
+	-fx-font-size: 38;
+}
+
+.subTitleText {
+	-fx-font-size: 24;
+}
+
+.subSubTitleText {
+	-fx-font-size: 18;
+}
+
+.text {
+	-fx-font-size: 15;
+}
+
+.separator *.line {
+	-fx-border-style: solid;
+	-fx-border-width: 3px;
+}

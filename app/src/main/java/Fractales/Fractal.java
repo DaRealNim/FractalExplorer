@@ -39,6 +39,12 @@ public abstract class Fractal
 		this.step = Math.abs(p2.getReal() - p1.getReal()) / screenSize;
 	}
 
+	public void setRectangle(Pair<Complex, Complex> rect) {
+		this.p1 = rect.getKey();
+		this.p2 = rect.getValue();
+		this.step = Math.abs(p2.getReal() - p1.getReal()) / screenSize;
+	}
+
 	public int getMaxIter() {
 		return maxIter;
 	}
