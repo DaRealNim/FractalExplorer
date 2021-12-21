@@ -14,12 +14,12 @@ import java.util.ArrayList;
 
 public class Mandelbrot extends Fractal {
 
-	public Mandelbrot(Complex p1, Complex p2, double step, int max, int r) {
-		super(p1, p2, step, max, r);
+	public Mandelbrot(ComplexRectangle rect, double step, int max, int r) {
+		super(rect, step, max, r);
 	}
 
-	public Mandelbrot(Complex p1, Complex p2, int screenSize, int max, int r) {
-		super(p1, p2, screenSize, max, r);
+	public Mandelbrot(ComplexRectangle rect, int screenSize, int max, int r) {
+		super(rect, screenSize, max, r);
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class Mandelbrot extends Fractal {
 	}
 
 	public Mandelbrot zoomed(double factor) {
-		return new Mandelbrot(p1.multiply(factor), p2.multiply(factor), screenSize, maxIter, radius);
+		return new Mandelbrot(getRect().scaled(factor), screenSize, maxIter, radius);
 	}
 
 	public String getName() {

@@ -15,13 +15,13 @@ import java.util.ArrayList;
 public class Julia extends Fractal {
 	protected final Complex constant;
 
-	public Julia(Complex p1, Complex p2, Complex constant, double step, int max, int r) {
-		super(p1, p2, step, max, r);
+	public Julia(ComplexRectangle rect, Complex constant, double step, int max, int r) {
+		super(rect, step, max, r);
 		this.constant = constant;
 	}
 
-	public Julia(Complex p1, Complex p2, Complex constant, int screenSize, int max, int r) {
-		super(p1, p2, screenSize, max, r);
+	public Julia(ComplexRectangle rect, Complex constant, int screenSize, int max, int r) {
+		super(rect, screenSize, max, r);
 		this.constant = constant;
 	}
 
@@ -40,7 +40,7 @@ public class Julia extends Fractal {
 	}
 
 	public Julia zoomed(double factor) {
-		return new Julia(p1.multiply(factor), p2.multiply(factor), constant, screenSize, maxIter, radius);
+		return new Julia(getRect().scaled(factor), constant, screenSize, maxIter, radius);
 	}
 
 	public String getName() {

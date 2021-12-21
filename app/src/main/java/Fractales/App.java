@@ -210,22 +210,21 @@ public class App {
 
         } else {
             Fractal frac = null;
-            Complex p1 = new Complex(x1, y1);
-            Complex p2 = new Complex(x2, y2);
+            ComplexRectangle rect = new ComplexRectangle(x1, y1, x2, y2);
             Complex constant = new Complex(complexReal, complexImag);
 
             switch(type) {
                 case "julia":
                     if(cmd.hasOption("s"))
-                        frac = new Julia(p1, p2, constant, step, iterations, 2).zoomed(zoom);
+                        frac = new Julia(rect, constant, step, iterations, 2).zoomed(zoom);
                     else
-                        frac = new Julia(p1, p2, constant, pixelSize, iterations, 2).zoomed(zoom);
+                        frac = new Julia(rect, constant, pixelSize, iterations, 2).zoomed(zoom);
                     break;
                 case "mandelbrot":
                     if(cmd.hasOption("s"))
-                        frac = new Mandelbrot(p1, p2, step, iterations, 2).zoomed(zoom);
+                        frac = new Mandelbrot(rect, step, iterations, 2).zoomed(zoom);
                     else
-                        frac = new Mandelbrot(p1, p2, pixelSize, iterations, 2).zoomed(zoom);
+                        frac = new Mandelbrot(rect, pixelSize, iterations, 2).zoomed(zoom);
                     break;
                 case "":
                     System.out.println("Error : unspecified fractal type for command line mode.");

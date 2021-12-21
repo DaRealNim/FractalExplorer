@@ -15,34 +15,32 @@ import java.util.ArrayList;
 public abstract class Fractal
 {
 
-	protected Complex p1, p2;
+	// protected Complex p1, p2;
+	protected ComplexRectangle rect;
 	protected int maxIter;
 	protected int radius;
 	protected Double step;
 	protected Integer screenSize;
 
-	public Fractal(Complex p1, Complex p2, double step, int max, int r) {
-		this.p1 = p1;
-		this.p2 = p2;
+	public Fractal(ComplexRectangle rect, double step, int max, int r) {
+		this.rect = rect;
 		this.maxIter = max;
 		this.radius = r;
 		this.step = step;
-		this.screenSize = (int)(Math.abs(p2.getReal() - p1.getReal()) / step);
+		this.screenSize = (int)(Math.abs(rect.getEnd().getReal() - rect.getStart().getReal()) / step);
 	}
 
-	public Fractal(Complex p1, Complex p2, int screenSize, int max, int r) {
-		this.p1 = p1;
-		this.p2 = p2;
+	public Fractal(ComplexRectangle rect, int screenSize, int max, int r) {
+		this.rect = rect;
 		this.maxIter = max;
 		this.radius = r;
 		this.screenSize = screenSize;
-		this.step = Math.abs(p2.getReal() - p1.getReal()) / screenSize;
+		this.step = Math.abs(rect.getEnd().getReal() - rect.getStart().getReal()) / screenSize;
 	}
 
-	public void setRectangle(Pair<Complex, Complex> rect) {
-		this.p1 = rect.getKey();
-		this.p2 = rect.getValue();
-		this.step = Math.abs(p2.getReal() - p1.getReal()) / screenSize;
+	public void setRectangle(ComplexRectangle rect) {
+		this.rect = rect;
+		this.step = Math.abs(rect.getEnd().getReal() - rect.getStart().getReal()) / screenSize;
 	}
 
 	public void setMaxIterations(int maxIter) {
@@ -53,20 +51,16 @@ public abstract class Fractal
 		return maxIter;
 	}
 
-	public Complex getRectStart() {
-		return p1;
-	}
-
-	public Complex getRectEnd() {
-		return p2;
-	}
-
 	public double getStep() {
 		return step;
 	}
 
 	public int getScreenSize() {
 		return screenSize;
+	}
+
+	public ComplexRectangle getRect() {
+		return rect;
 	}
 
 	public abstract int escapeOrbit(Complex z);

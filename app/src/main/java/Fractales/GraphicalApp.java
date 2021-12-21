@@ -53,7 +53,7 @@ public class GraphicalApp extends Application {
         }
     }
 
-    private Pair<Complex, Complex> getComplexRectangleFromInputs(TextField x1Field,
+    private ComplexRectangle getComplexRectangleFromInputs(TextField x1Field,
                                                                  TextField y1Field,
                                                                  TextField x2Field,
                                                                  TextField y2Field)
@@ -63,9 +63,7 @@ public class GraphicalApp extends Application {
             double y1 = Double.parseDouble(y1Field.getText());
             double x2 = Double.parseDouble(x2Field.getText());
             double y2 = Double.parseDouble(y2Field.getText());
-            Complex z1 = new Complex(x1, y1);
-            Complex z2 = new Complex(x2, y2);
-            return new Pair(z1, z2);
+            return new ComplexRectangle(x1, y1, x2, y2);
         } catch (NumberFormatException e) {}
         return null;
     }
@@ -75,10 +73,10 @@ public class GraphicalApp extends Application {
                                               TextField x2Field,
                                               TextField y2Field)
     {
-        x1Field.setText(""+currentlyDisplayed.getRectStart().getReal());
-        y1Field.setText(""+currentlyDisplayed.getRectStart().getImaginary());
-        x2Field.setText(""+currentlyDisplayed.getRectEnd().getReal());
-        y2Field.setText(""+currentlyDisplayed.getRectEnd().getImaginary());
+        x1Field.setText(""+currentlyDisplayed.getRect().getStart().getReal());
+        y1Field.setText(""+currentlyDisplayed.getRect().getStart().getImaginary());
+        x2Field.setText(""+currentlyDisplayed.getRect().getEnd().getReal());
+        y2Field.setText(""+currentlyDisplayed.getRect().getEnd().getImaginary());
     }
 
     private int getIterationsFromInput(TextField field) {
@@ -217,14 +215,14 @@ public class GraphicalApp extends Application {
             int maxIter = getIterationsFromInput(iterField);
             if (maxIter <= 0)
                 return;
-            Pair<Complex, Complex> rect = getComplexRectangleFromInputs(firstPointRealField,
+            ComplexRectangle rect = getComplexRectangleFromInputs(firstPointRealField,
                                                                         firstPointImaginaryField,
                                                                         secondPointRealField,
                                                                         secondPointImaginaryField);
             if(juliaRadio.isSelected()) {
-                frac = new Julia(rect.getKey(), rect.getValue(), new Complex(-0.70176, -0.3842), SIZE, maxIter, 2);
+                frac = new Julia(rect, new Complex(-0.70176, -0.3842), SIZE, maxIter, 2);
             } else if (mandelRadio.isSelected()) {
-                frac = new Mandelbrot(rect.getKey(), rect.getValue(), SIZE, maxIter, 2);
+                frac = new Mandelbrot(rect, SIZE, maxIter, 2);
             }
             if (frac != null) {
                 currentlyDisplayed = frac;
@@ -245,23 +243,18 @@ public class GraphicalApp extends Application {
                 double step = currentlyDisplayed.getStep();
                 double deltaReal = zoomX*step;
                 double deltaImag = zoomY*step;
-                Complex newCenter = currentlyDisplayed.getRectStart().add(new Complex(deltaReal, -deltaImag));
+                Complex newCenter = currentlyDisplayed.getRect().getStart().add(new Complex(deltaReal, -deltaImag));
                 System.out.println("new center: "+newCenter);
-                // double newZ1Real = newCenter.getReal() - (SIZE*step)/2;
-                // double newZ1Imag = newCenter.getImaginary() + (SIZE*step)/2;
                 Complex newZ1 = newCenter.add(new Complex(-(SIZE*step)/2, (SIZE*step)/2));
                 Complex newZ2 = newZ1.add(new Complex(SIZE*step, -SIZE*step));
-                // currentlyDisplayed.setRectangle(new Pair(new Complex(newZ1Real, newZ1Imag),
-                //                                          new Complex(newZ1Real+SIZE*step, newZ1Imag-SIZE*step))
-                // );
-                currentlyDisplayed.setRectangle(new Pair(newZ1, newZ2));
+                currentlyDisplayed.setRectangle(new ComplexRectangle(newZ1, newZ2));
                 currentlyDisplayed = currentlyDisplayed.zoomed(0.85);
                 renderFractal(gc);
                 updateComplexRectangleFields(firstPointRealField, firstPointImaginaryField,
                                              secondPointRealField, secondPointImaginaryField);
                 lineGC.clearRect(0, 0, SIZE, SIZE);
-                int zoomX = SIZE/2;
-                int zoomY = zoomX;
+                zoomX = SIZE/2;
+                zoomY = zoomX;
                 lineGC.strokeLine(0, zoomX, SIZE, zoomX);
                 lineGC.strokeLine(zoomX, 0, zoomX, SIZE);
             }
