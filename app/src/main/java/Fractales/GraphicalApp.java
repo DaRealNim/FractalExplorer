@@ -1,35 +1,28 @@
 package Fractales;
 
-import java.awt.image.BufferedImage;
+import org.apache.commons.math3.complex.Complex;
+
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.ParallelCamera;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-import javafx.scene.text.*;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.util.Pair;
-import org.apache.commons.math3.complex.Complex;
 
 
 public class GraphicalApp extends Application {
@@ -167,7 +160,6 @@ public class GraphicalApp extends Application {
         // HBox rectButtonsPane = new HBox(3);
         // rectButtonsPane.getChildren().addAll(resetButton);
 
-        Text movementTitle = newText("Move inside fractal", "subSubTitleText");
         Button upButton = new Button("↑");
         Button downButton = new Button("↓");
         Button leftButton = new Button("←");
@@ -203,8 +195,8 @@ public class GraphicalApp extends Application {
                                  movementPane
 
         );
-        controlPane.setHalignment(titleText, HPos.CENTER);
-        controlPane.setHalignment(resetButton, HPos.RIGHT);
+        GridPane.setHalignment(titleText, HPos.CENTER);
+        GridPane.setHalignment(resetButton, HPos.RIGHT);
         controlPane.setStyle("-fx-background-color: #EEEEEE");
         controlPane.setPadding(new Insets(10,50,10,50));
         controlPane.setVgap(15);
@@ -288,15 +280,4 @@ public class GraphicalApp extends Application {
         txt.getStyleClass().add(styleClass);
         return txt;
     }
-
-    private Button createButton(String text, String styleClass)
-    {
-        Button newButton = new Button();
-
-        newButton.setText(text);
-        newButton.getStyleClass().add(styleClass);
-
-        return (newButton);
-    }
-
 }

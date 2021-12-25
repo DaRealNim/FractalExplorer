@@ -2,17 +2,19 @@ package Fractales;
 
 import java.io.File;
 import java.io.IOException;
-import javafx.scene.paint.Color;
-import java.awt.image.BufferedImage;
-import java.util.List;
 import java.util.ArrayList;
-import javafx.util.Pair;
+import java.util.List;
+
 import javax.imageio.ImageIO;
-import javafx.embed.swing.*;
+
 import org.apache.commons.math3.complex.Complex;
+
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
 import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
+import javafx.util.Pair;
 
 
 
@@ -38,7 +40,7 @@ public class Renderer {
 
 				for (int x = 0; x < sz; x++) {
 					for (int y = 0; y < sz; y++) {
-						xyPairs.add(new Pair(x, y));
+						xyPairs.add(new Pair<Integer, Integer>(x, y));
 					}
 				}
 

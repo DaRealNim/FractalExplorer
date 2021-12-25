@@ -1,15 +1,6 @@
 package Fractales;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
 import org.apache.commons.math3.complex.Complex;
-import java.lang.Math;
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.io.File;
-import javafx.util.Pair;
-import java.util.List;
-import java.util.ArrayList;
 
 
 public class Mandelbrot extends Fractal {
