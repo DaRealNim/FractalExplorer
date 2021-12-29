@@ -2,7 +2,12 @@ package Fractales;
 
 import org.apache.commons.math3.complex.Complex;
 
-import Fractales.ComplexRectangle.TranslationDirection;
+import Fractales.colorthemes.DefaultColorTheme;
+import Fractales.fractals.Fractal;
+import Fractales.fractals.Julia;
+import Fractales.fractals.Mandelbrot;
+import Fractales.utils.ComplexRectangle;
+import Fractales.utils.ComplexRectangle.TranslationDirection;
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -41,7 +46,7 @@ public class GraphicalApp extends Application {
 
     private void renderFractal(GraphicsContext gc) {
         if (currentlyDisplayed != null) {
-            Image img = Renderer.drawFractal(currentlyDisplayed);
+            Image img = Renderer.drawFractal(currentlyDisplayed, new DefaultColorTheme());
 					  gc.drawImage(img, 0, 0);
         }
     }

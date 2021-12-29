@@ -9,6 +9,8 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.math3.complex.Complex;
 
+import Fractales.colorthemes.ColorTheme;
+import Fractales.fractals.Fractal;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
@@ -20,17 +22,7 @@ import javafx.util.Pair;
 
 public class Renderer {
 
-    private static Color getColorOfValue(int value, int maxIter) {
-        if (value >= maxIter)
-					return Color.BLACK;
-
-					float hue = (float) value / maxIter;
-
-        Color c = Color.hsb(hue * 360, 0.8f, 1.0f);
-				return c;
-    }
-
-    public static Image drawFractal(final Fractal fractal) {
+    public static Image drawFractal(final Fractal fractal, ColorTheme theme) {
         final int sz = fractal.getScreenSize();
 
         WritableImage img = new WritableImage(sz, sz);
@@ -44,12 +36,12 @@ public class Renderer {
 					}
 				}
 
-        xyPairs.parallelStream().forEach(p -> colorPixel(img, pw, fractal, p));
+        xyPairs.parallelStream().forEach(p -> colorPixel(theme, img, pw, fractal, p));
 
         return (img);
     }
 
-    private static void colorPixel(WritableImage img, PixelWriter pw, final Fractal f, Pair<Integer, Integer> p) {
+    private static void colorPixel(ColorTheme theme, WritableImage img, PixelWriter pw, final Fractal f, Pair<Integer, Integer> p) {
         final double step = f.getStep();
         int x = p.getKey();
         int y = p.getValue();
@@ -59,7 +51,7 @@ public class Renderer {
 
 
         int value = f.escapeOrbit(c);
-        Color color = getColorOfValue(value, f.getMaxIter());
+        Color color = theme.getColor(value, f.getMaxIter());
 
 				pw.setColor(x, y, color);
     }

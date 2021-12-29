@@ -1,8 +1,9 @@
-package Fractales;
+package Fractales.fractals;
 
 import org.apache.commons.math3.complex.Complex;
 
-import Fractales.ComplexRectangle.TranslationDirection;
+import Fractales.utils.ComplexRectangle;
+import Fractales.utils.ComplexRectangle.TranslationDirection;
 
 public class Mandelbrot extends Fractal {
 

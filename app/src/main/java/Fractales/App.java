@@ -9,15 +9,20 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.math3.complex.Complex;
 
+import Fractales.colorthemes.DefaultColorTheme;
+import Fractales.fractals.Fractal;
+import Fractales.fractals.Julia;
+import Fractales.fractals.Mandelbrot;
+import Fractales.utils.ComplexRectangle;
 import javafx.application.Application;
 
 
 public class App {
 
     private static double x1 = -2;
-    private static double y1 = -2;
+    private static double y1 = 2;
     private static double x2 = 2;
-    private static double y2 = 2;
+    private static double y2 = -2;
     private static double complexReal = -0.70176;
     private static double complexImag = -0.3842;
     private static double step = 0.004;
@@ -231,7 +236,7 @@ public class App {
                 break;
             }
 
-            Renderer.saveToFile(filename.isEmpty() ? frac.getName() : filename, Renderer.drawFractal(frac));
+            Renderer.saveToFile(filename.isEmpty() ? frac.getName() : filename, Renderer.drawFractal(frac, new DefaultColorTheme()));
 
 			// Mandelbrot mdb = new Mandelbrot(800, 600, 1000, 2);
 
