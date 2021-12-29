@@ -2,6 +2,8 @@ package Fractales;
 
 import org.apache.commons.math3.complex.Complex;
 
+import Fractales.ComplexRectangle.TranslationDirection;
+
 
 public class Julia extends Fractal {
 	protected final Complex constant;
@@ -32,6 +34,11 @@ public class Julia extends Fractal {
 
 	public Julia zoomed(double factor) {
 		return new Julia(getRect().scaled(factor), constant, screenSize, maxIter, radius);
+	}
+
+	public Julia translated(TranslationDirection direction) {
+		double zoomfactor = (getRect().getEnd().getReal() - getRect().getStart().getReal()) / 4.0;
+		return new Julia(getRect().translated(direction, zoomfactor), constant, screenSize, maxIter, radius);
 	}
 
 	public String getName() {

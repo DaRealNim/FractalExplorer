@@ -2,6 +2,7 @@ package Fractales;
 
 import org.apache.commons.math3.complex.Complex;
 
+import Fractales.ComplexRectangle.TranslationDirection;
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -46,9 +47,9 @@ public class GraphicalApp extends Application {
     }
 
     private ComplexRectangle getComplexRectangleFromInputs(TextField x1Field,
-                                                                 TextField y1Field,
-                                                                 TextField x2Field,
-                                                                 TextField y2Field)
+                                                           TextField y1Field,
+                                                           TextField x2Field,
+                                                           TextField y2Field)
     {
         try {
             double x1 = Double.parseDouble(x1Field.getText());
@@ -230,16 +231,16 @@ public class GraphicalApp extends Application {
 
         zoomInButton.setOnAction(event -> {
             if(zoomX != -1 && zoomY != -1 && currentlyDisplayed != null) {
-                System.out.println("Zooming on "+zoomX+","+zoomY);
+                // System.out.println("Zooming on "+zoomX+","+zoomY);
                 double step = currentlyDisplayed.getStep();
                 double deltaReal = zoomX*step;
                 double deltaImag = zoomY*step;
                 Complex newCenter = currentlyDisplayed.getRect().getStart().add(new Complex(deltaReal, -deltaImag));
-                System.out.println("new center: "+newCenter);
+                // System.out.println("new center: "+newCenter);
                 Complex newZ1 = newCenter.add(new Complex(-(SIZE*step)/2, (SIZE*step)/2));
                 Complex newZ2 = newZ1.add(new Complex(SIZE*step, -SIZE*step));
                 currentlyDisplayed.setRectangle(new ComplexRectangle(newZ1, newZ2));
-                currentlyDisplayed = currentlyDisplayed.zoomed(0.85);
+                currentlyDisplayed = currentlyDisplayed.zoomed(0.80);
                 renderFractal(gc);
                 updateComplexRectangleFields(firstPointRealField, firstPointImaginaryField,
                                              secondPointRealField, secondPointImaginaryField);
@@ -248,6 +249,43 @@ public class GraphicalApp extends Application {
                 zoomY = zoomX;
                 lineGC.strokeLine(0, zoomX, SIZE, zoomX);
                 lineGC.strokeLine(zoomX, 0, zoomX, SIZE);
+            }
+        });
+
+        zoomOutButton.setOnAction(event -> {
+            if (currentlyDisplayed != null) {
+                currentlyDisplayed = currentlyDisplayed.zoomed(1.2);
+                renderFractal(gc);
+                updateComplexRectangleFields(firstPointRealField, firstPointImaginaryField,
+                                             secondPointRealField, secondPointImaginaryField);
+            }
+        });
+
+        leftButton.setOnAction(event -> {
+            if (currentlyDisplayed != null) {
+                currentlyDisplayed = currentlyDisplayed.translated(TranslationDirection.LEFT);
+                renderFractal(gc);
+            }
+        });
+
+        rightButton.setOnAction(event -> {
+            if (currentlyDisplayed != null) {
+                currentlyDisplayed = currentlyDisplayed.translated(TranslationDirection.RIGHT);
+                renderFractal(gc);
+            }
+        });
+
+        upButton.setOnAction(event -> {
+            if (currentlyDisplayed != null) {
+                currentlyDisplayed = currentlyDisplayed.translated(TranslationDirection.UP);
+                renderFractal(gc);
+            }
+        });
+
+        downButton.setOnAction(event -> {
+            if (currentlyDisplayed != null) {
+                currentlyDisplayed = currentlyDisplayed.translated(TranslationDirection.DOWN);
+                renderFractal(gc);
             }
         });
 

@@ -2,6 +2,8 @@ package Fractales;
 
 import org.apache.commons.math3.complex.Complex;
 
+import Fractales.ComplexRectangle.TranslationDirection;
+
 
 public abstract class Fractal
 {
@@ -10,8 +12,8 @@ public abstract class Fractal
 	protected ComplexRectangle rect;
 	protected int maxIter;
 	protected int radius;
-	protected Double step;
-	protected Integer screenSize;
+	protected double step;
+	protected int screenSize;
 
 	public Fractal(ComplexRectangle rect, double step, int max, int r) {
 		this.rect = rect;
@@ -56,5 +58,6 @@ public abstract class Fractal
 
 	public abstract int escapeOrbit(Complex z);
 	public abstract <T extends Fractal> T zoomed(double factor);
+	public abstract <T extends Fractal> T translated(TranslationDirection direction);
 	public abstract String getName();
 }
