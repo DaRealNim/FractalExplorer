@@ -51,6 +51,15 @@ public class GraphicalApp extends Application {
         }
     }
 
+    private Complex getJuliaConstantFromInputs(TextField real, TextField imag) {
+        try {
+            double r = Double.parseDouble(real.getText());
+            double i = Double.parseDouble(imag.getText());
+            return new Complex(r, i);
+        } catch (NumberFormatException e) {}
+        return null;
+    }
+
     private ComplexRectangle getComplexRectangleFromInputs(TextField x1Field,
                                                            TextField y1Field,
                                                            TextField x2Field,
@@ -217,7 +226,9 @@ public class GraphicalApp extends Application {
                                                                         secondPointRealField,
                                                                         secondPointImaginaryField);
             if(juliaRadio.isSelected()) {
-                frac = new Julia(rect, new Complex(-0.70176, -0.3842), SIZE, maxIter, 2);
+                Complex constant = getJuliaConstantFromInputs(realField, imaginaryField);
+                if (constant != null)
+                    frac = new Julia(rect, constant, SIZE, maxIter, 2);
             } else if (mandelRadio.isSelected()) {
                 frac = new Mandelbrot(rect, SIZE, maxIter, 2);
             }
