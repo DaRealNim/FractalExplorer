@@ -18,7 +18,7 @@ public abstract class ColorTheme implements BiFunction<Integer, Integer, Color> 
     public abstract Color apply(Integer value, Integer maxIter);
 
     /**
-     * 
+     * A wrapper around the apply function with a more explicit name
      * @param value The number of iterations ran for a specific point of the fractal before it started to diverge.
      * @param maxIter The maximum iterations defined for the fractal.
      * @return The color calculated by the theme according the the number of iterations and max iterations.

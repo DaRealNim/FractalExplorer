@@ -9,10 +9,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.math3.complex.Complex;
 
-import Fractales.colorthemes.ColorTheme;
-import Fractales.colorthemes.DefaultColorTheme;
-import Fractales.colorthemes.ElectricColorTheme;
-import Fractales.colorthemes.SnowColorTheme;
+import Fractales.colorthemes.*;
 import Fractales.fractals.Fractal;
 import Fractales.fractals.Julia;
 import Fractales.fractals.Mandelbrot;
