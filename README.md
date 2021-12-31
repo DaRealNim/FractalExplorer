@@ -55,8 +55,6 @@ Il est possible d'accéder au GUI avec l'option `-G` ou `--graphical`
 
 Toutes les options pour générer une fractale ci-dessus sont disponibles et libelées.
 
-![52695db52a58bca2c72a761d4ebd6a2e.png](:/fae5b8df5ec547ea9fa93166150cdd4c)
-
 Une fois que vous avez généré votre fractale avec le bouton `Generate`, vous pouvez l'explorer, pour se déplacer sur les axes du plan, utilisez les flèches à diposition, si vous voulez "zoomer" à un endroit précis, cliquez sur le point de l'image que vous voulez voir et appuyez sur `Zoom +`.
 
 La valeur par défaut de 50 itérations fournit très peu de détails, il est récommandable de zoomer là où on veut voir, et générer à nouveau la fractale sur le rectangle du plan avec une valeur d'itérations plus grande.
@@ -85,14 +83,10 @@ Si l'utilisateur souhaite faire un tour de tests, il peut lancer `./manual_test.
 La commande utilisée était
 `python3 -m timeit "__import__('os').system('./test.sh')"`
 
-Elle renvoie la moyenne du temps d'éxécution de 5 répétitions de ./test.sh
+Elle renvoie la moyenne du temps d'éxécution de 5 répétitions de ./test.sh:
 
-## Avant parallelisation
+*Avant parallelisation: ~ 222s*
 
-![96564c83a699e2ff5ec579fcd3df8a19.png](:/c1a29b7340b944f88c1585f270a09dcb)
-
-## Après parallelisation
-
-![9467ae96cc3a1717ed4523686cccd7bf.png](:/5f4f790891ba450c812a640cd825c97e)
+*Après parallelisation: ~ 92.2s*
 
 Ce qui répresente une amélioration d'environ 240% du temps d'éxécution après la parallelisation de Renderer.
