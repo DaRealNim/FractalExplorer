@@ -2,36 +2,60 @@ package Fractales.utils;
 
 import org.apache.commons.math3.complex.Complex;
 
-
+/**
+ * A class representing a complex rectangle, defined by two complex points, as well as utility functions
+ * to manipulate it.
+ * This class is final and immutable to ensure proper function of the software, and can only be
+ * manipulated by creating a new instance of it.
+ */
 public final class ComplexRectangle {
     private final Complex p1;
     private final Complex p2;
     public enum TranslationDirection{UP, DOWN, LEFT, RIGHT};
 
+    /**
+     * 
+     * @param p1
+     * @param p2
+     */
     public ComplexRectangle(Complex p1, Complex p2) {
         this.p1 = p1;
         this.p2 = p2;
     }
 
+    /**
+     * 
+     * @param x1 First point's real value
+     * @param y1 First point's imaginary value
+     * @param x2 Second point's real value
+     * @param y2 Second point's imaginary value
+     */
     public ComplexRectangle(double x1, double y1, double x2, double y2) {
         this.p1 = new Complex(x1, y1);
         this.p2 = new Complex(x2, y2);
     }
 
-    // public Complex getCenter() {
-    //     double real = (getEnd().getReal() + getStart().getReal()) / 2
-    //     double imag = (getEnd().getImaginary() + getStart().getImaginary()) / 2
-    //     return new Complex(real, imag);
-    // }
-
+    /**
+     * Returns the width of the rectangle
+     * @return
+     */
     public double getWidth() {
         return Math.abs(getEnd().getReal() - getStart().getReal());
     }
 
+    /**
+     * Returns the height of the rectangle
+     * @return
+     */
     public double getHeight() {
         return Math.abs(getEnd().getImaginary() - getStart().getImaginary());
     }
 
+    /**
+     * Returns a scaled version of the rectangle
+     * @param scale The scale factor (1 is no change, &lt; 0 is smaller, &gt; 0 is larger)
+     * @return
+     */
     public ComplexRectangle scaled(double scale) {
         double newWidth = getWidth()*scale;
         double newHeight = getHeight()*scale;
@@ -42,6 +66,12 @@ public final class ComplexRectangle {
         return new ComplexRectangle(z1Real, z1Imag, z2Real, z2Imag);
     }
 
+    /**
+     * Returns a translated version of the rectangle
+     * @param direction The translation direction
+     * @param factor The translation factor
+     * @return
+     */
     public ComplexRectangle translated(TranslationDirection direction, double factor) {
         Complex toAdd = null;
         double delta = 0.4*factor;
@@ -62,10 +92,18 @@ public final class ComplexRectangle {
         return new ComplexRectangle(p1.add(toAdd), p2.add(toAdd));
     }
 
+    /**
+     * Returns the first point (start point) of the rectangle
+     * @return
+     */
     public Complex getStart() {
         return p1;
     }
 
+    /**
+     * Returns the second point (end point) of the rectangle
+     * @return
+     */
     public Complex getEnd() {
         return p2;
     }

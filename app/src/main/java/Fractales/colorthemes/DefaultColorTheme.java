@@ -2,6 +2,10 @@ package Fractales.colorthemes;
 
 import javafx.scene.paint.Color;
 
+/**
+ * The default color theme, also known as Colorful. For a specific point of the fractal,
+ * the more it diverges, the farther it is on the hue color wheel.
+ */
 public class DefaultColorTheme extends ColorTheme {
 
     public Color apply(Integer value, Integer maxIter) {

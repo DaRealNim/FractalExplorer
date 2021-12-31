@@ -19,9 +19,18 @@ import javafx.scene.paint.Color;
 import javafx.util.Pair;
 
 
-
+/**
+ * A class that centralizes Fractal rendering operation for both the command line and the GUI part of
+ * the program.
+ */
 public class Renderer {
 
+    /**
+     * Creates a JavaFX image from a Fractal and a ColorTheme.
+     * @param fractal
+     * @param theme
+     * @return
+     */
     public static Image drawFractal(final Fractal fractal, ColorTheme theme) {
         final int sz = fractal.getScreenSize();
 
@@ -56,6 +65,11 @@ public class Renderer {
 				pw.setColor(x, y, color);
     }
 
+    /**
+     * Saves a drawn fractal on a JavaFX image to a PNG file with a specific path
+     * @param filename The path/name of the file to create
+     * @param image The JavaFX image to save
+     */
     public static void saveToFile(final String filename, Image image) {
         try {
             ImageIO.write(SwingFXUtils.fromFXImage(image, null), "PNG", new File(filename + ".png"));

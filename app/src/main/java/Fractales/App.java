@@ -9,17 +9,20 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.math3.complex.Complex;
 
-import Fractales.colorthemes.ColorTheme;
-import Fractales.colorthemes.DefaultColorTheme;
-import Fractales.colorthemes.ElectricColorTheme;
-import Fractales.colorthemes.SnowColorTheme;
+import Fractales.colorthemes.*;
 import Fractales.fractals.Fractal;
 import Fractales.fractals.Julia;
 import Fractales.fractals.Mandelbrot;
 import Fractales.utils.ComplexRectangle;
 import javafx.application.Application;
 
-
+/**
+ * Main class. Contains the main function, parses the command line arguments, and either generates
+ * an image file, or starts the graphical Fractal Explorer application.
+ * 
+ * @see GraphicalApp
+ * @see Renderer
+ */
 public class App {
 
     private static double x1 = -2;
@@ -125,8 +128,12 @@ public class App {
     }
 
 
-
-    public static void main(String[] args) throws ParseException {
+    /**
+     * The main method, entry point of the program
+     * 
+     * @param args The command line options
+     */
+    public static void main(String[] args) {
         Options options = new Options();
         options.addOption(Option.builder("G")
                                 .longOpt("graphical")
