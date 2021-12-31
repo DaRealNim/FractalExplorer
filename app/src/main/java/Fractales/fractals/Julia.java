@@ -5,7 +5,9 @@ import org.apache.commons.math3.complex.Complex;
 import Fractales.utils.ComplexRectangle;
 import Fractales.utils.ComplexRectangle.TranslationDirection;
 
-
+/**
+ * The Julia set
+ */
 public class Julia extends Fractal {
 	protected final Complex constant;
 

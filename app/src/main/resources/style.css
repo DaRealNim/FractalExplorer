@@ -1,5 +1,5 @@
 .titleText {
-	-fx-font-size: 38;
+	-fx-font-size: 28;
 }
 
 .subTitleText {
@@ -13,6 +13,11 @@
 .text {
 	-fx-font-size: 15;
 }
+
+.errorText {
+	-fx-font-size: 13;
+	-fx-fill: red;
+}²
 
 .separator *.line {
 	-fx-border-style: solid;

@@ -58,13 +58,13 @@ public final class ComplexRectangle {
      */
     public ComplexRectangle scaled(double scale) {
         double newWidth = getWidth()*scale;
-        double newHeight = getHeight()*scale;
+        double newHeight = newWidth;
         double z1Real = getStart().getReal() + getWidth()/2 - newWidth/2;
         double z1Imag = getStart().getImaginary() - getHeight()/2 + newHeight/2;
         double z2Real = getEnd().getReal() - getWidth()/2 + newWidth/2;
-        double z2Imag = getEnd().getImaginary() + getHeight()/2 + newHeight/2;
+        double z2Imag = getEnd().getImaginary() + getHeight()/2 - newHeight/2;
         return new ComplexRectangle(z1Real, z1Imag, z2Real, z2Imag);
-    }
+    }   
 
     /**
      * Returns a translated version of the rectangle
@@ -90,6 +90,22 @@ public final class ComplexRectangle {
                 break;
         }
         return new ComplexRectangle(p1.add(toAdd), p2.add(toAdd));
+    }
+
+    /**
+     * Checks if this complex rectangle is a square (same width than heightnn with small
+     * error margin), and if the start point is on top left of the end point on the
+     * complex plane
+     * 
+     * @return
+     */
+    public boolean isValidComplexSquare() {
+        double x1 = p1.getReal();
+        double y1 = p1.getImaginary();
+        double x2 = p2.getReal();
+        double y2 = p2.getImaginary();
+
+        return (Math.abs(x2 - x1) - Math.abs(y2 - y1) < 1.0E-10) && x2 > x1 && y2 < y1;
     }
 
     /**

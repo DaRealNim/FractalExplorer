@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"Fractales"},{"l":"Fractales.colorthemes"},{"l":"Fractales.fractals"},{"l":"Fractales.utils"}];updateSearchResults();

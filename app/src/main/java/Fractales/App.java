@@ -63,7 +63,7 @@ public class App {
             String optVal = cmd.getOptionValue("r");
             String[] coords = optVal.split(",");
             if (coords.length != 4) {
-                throw new ParseException("invalid rectangle. Must be 4 comma separated integers, with both sides equal (must be a square).");
+                throw new ParseException("invalid rectangle. Must be 4 comma separated integers, with both sides equal (must be a square) and x1 < x2 & y1 > y2.");
             }
             try {
                 x1 = Double.parseDouble(coords[0]);
@@ -71,11 +71,11 @@ public class App {
                 x2 = Double.parseDouble(coords[2]);
                 y2 = Double.parseDouble(coords[3]);
 
-                if (Math.abs(x2 - x1) != Math.abs(y2 - y1))
+                if (!(new ComplexRectangle(x1, y1, x2, y2)).isValidComplexSquare())
                     throw new NumberFormatException();
 
             } catch (NumberFormatException e) {
-                throw new ParseException("invalid rectangle. Must be 4 comma separated integers, with both sides equal (must be a square).");
+                throw new ParseException("invalid rectangle. Must be 4 comma separated integers, with both sides equal (must be a square) and x1 < x2 & y1 > y2.");
             }
         }
 

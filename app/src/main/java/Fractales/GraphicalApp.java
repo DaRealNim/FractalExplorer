@@ -37,8 +37,9 @@ public class GraphicalApp extends Application {
 
     Fractal currentlyDisplayed;
     ColorTheme currentTheme;
-    int zoomX;
-    int zoomY;
+    Text error = newText("", "errorText");
+    int zoomX = -1;
+    int zoomY = -1;
 
     private final int SIZE = 800;
 
@@ -55,6 +56,7 @@ public class GraphicalApp extends Application {
             double i = Double.parseDouble(imag.getText());
             return new Complex(r, i);
         } catch (NumberFormatException e) {}
+        error.setText("Parsing failed for julia constant");
         return null;
     }
 
@@ -68,8 +70,15 @@ public class GraphicalApp extends Application {
             double y1 = Double.parseDouble(y1Field.getText());
             double x2 = Double.parseDouble(x2Field.getText());
             double y2 = Double.parseDouble(y2Field.getText());
-            return new ComplexRectangle(x1, y1, x2, y2);
+            ComplexRectangle rect = new ComplexRectangle(x1, y1, x2, y2);
+            if(!rect.isValidComplexSquare()) {
+                error.setText("Complex rectangle isn't a square, or second point\nis behind first point"+(Math.abs(x2-x1)-Math.abs(y2-y1)));
+                return null;
+            }
+                
+            return rect;
         } catch (NumberFormatException e) {}
+        error.setText("Parsing failed for complex rectangle coordinates");
         return null;
     }
 
@@ -88,6 +97,7 @@ public class GraphicalApp extends Application {
         try {
             return Integer.parseInt(field.getText());
         } catch (NumberFormatException e) {}
+        error.setText("Parsing failed for iterations");
         return -1;
     }
 
@@ -100,7 +110,6 @@ public class GraphicalApp extends Application {
         HBox mainPane = new HBox();
         Canvas fractalCanvas = new Canvas(SIZE, SIZE);
         Canvas lineCanvas = new Canvas(SIZE, SIZE);
-        // lineCanvas.setStyle("fx-background-color: transparent;");
 
         GridPane controlPane = new GridPane();
         Scene scene = new Scene(mainPane, SIZE+400, SIZE, Color.BEIGE);
@@ -164,10 +173,7 @@ public class GraphicalApp extends Application {
         VBox displayedRectanglePanel = new VBox(3);
         displayedRectanglePanel.getChildren().addAll(displayedRectangleTitle,
                                                      rectanglePointsInputs);
-        // Button jumpButton = new Button("Set rectangle");
         Button resetButton = new Button("Reset rectangle");
-        // HBox rectButtonsPane = new HBox(3);
-        // rectButtonsPane.getChildren().addAll(resetButton);
 
 
         Button generateButton = new Button("Generate");
@@ -217,14 +223,16 @@ public class GraphicalApp extends Application {
                                  movementPane,
                                  new Separator(),
                                  colorThemeTitle,
-                                 themeButtonPane
+                                 themeButtonPane,
+                                 new Separator(),
+                                 error
 
         );
         GridPane.setHalignment(titleText, HPos.CENTER);
         GridPane.setHalignment(resetButton, HPos.RIGHT);
         controlPane.setStyle("-fx-background-color: #EEEEEE");
         controlPane.setPadding(new Insets(10,50,10,50));
-        controlPane.setVgap(15);
+        controlPane.setVgap(12);
 
         generateButton.setOnAction(event -> {
             Fractal frac = null;
@@ -235,6 +243,8 @@ public class GraphicalApp extends Application {
                                                                         firstPointImaginaryField,
                                                                         secondPointRealField,
                                                                         secondPointImaginaryField);
+            if (rect == null)
+                return;
             if(juliaRadio.isSelected()) {
                 Complex constant = getJuliaConstantFromInputs(realField, imaginaryField);
                 if (constant != null)
@@ -245,6 +255,9 @@ public class GraphicalApp extends Application {
             if (frac != null) {
                 currentlyDisplayed = frac;
                 renderFractal(gc);
+                error.setText("");
+            } else {
+                error.setText("No fractal type selected");
             }
         });
 
@@ -257,16 +270,14 @@ public class GraphicalApp extends Application {
 
         zoomInButton.setOnAction(event -> {
             if(zoomX != -1 && zoomY != -1 && currentlyDisplayed != null) {
-                // System.out.println("Zooming on "+zoomX+","+zoomY);
                 double step = currentlyDisplayed.getStep();
                 double deltaReal = zoomX*step;
                 double deltaImag = zoomY*step;
                 Complex newCenter = currentlyDisplayed.getRect().getStart().add(new Complex(deltaReal, -deltaImag));
-                // System.out.println("new center: "+newCenter);
                 Complex newZ1 = newCenter.add(new Complex(-(SIZE*step)/2, (SIZE*step)/2));
                 Complex newZ2 = newZ1.add(new Complex(SIZE*step, -SIZE*step));
                 currentlyDisplayed.setRectangle(new ComplexRectangle(newZ1, newZ2));
-                currentlyDisplayed = currentlyDisplayed.zoomed(0.80);
+                currentlyDisplayed = currentlyDisplayed.zoomed(0.7);
                 renderFractal(gc);
                 updateComplexRectangleFields(firstPointRealField, firstPointImaginaryField,
                                              secondPointRealField, secondPointImaginaryField);
@@ -275,6 +286,9 @@ public class GraphicalApp extends Application {
                 zoomY = zoomX;
                 lineGC.strokeLine(0, zoomX, SIZE, zoomX);
                 lineGC.strokeLine(zoomX, 0, zoomX, SIZE);
+                error.setText("");
+            } else {
+                error.setText("No fractal displayed, or no zoom location selected\n(click somewhere on the fractal!)");
             }
         });
 
@@ -284,6 +298,9 @@ public class GraphicalApp extends Application {
                 renderFractal(gc);
                 updateComplexRectangleFields(firstPointRealField, firstPointImaginaryField,
                                              secondPointRealField, secondPointImaginaryField);
+                error.setText("");
+            } else {
+                error.setText("No fractal displayed, or no zoom location selected\n(click somewhere on the fractal!)");
             }
         });
 
@@ -291,6 +308,8 @@ public class GraphicalApp extends Application {
             if (currentlyDisplayed != null) {
                 currentlyDisplayed = currentlyDisplayed.translated(TranslationDirection.LEFT);
                 renderFractal(gc);
+                updateComplexRectangleFields(firstPointRealField, firstPointImaginaryField,
+                                             secondPointRealField, secondPointImaginaryField);
             }
         });
 
@@ -298,6 +317,8 @@ public class GraphicalApp extends Application {
             if (currentlyDisplayed != null) {
                 currentlyDisplayed = currentlyDisplayed.translated(TranslationDirection.RIGHT);
                 renderFractal(gc);
+                updateComplexRectangleFields(firstPointRealField, firstPointImaginaryField,
+                                             secondPointRealField, secondPointImaginaryField);
             }
         });
 
@@ -305,6 +326,8 @@ public class GraphicalApp extends Application {
             if (currentlyDisplayed != null) {
                 currentlyDisplayed = currentlyDisplayed.translated(TranslationDirection.UP);
                 renderFractal(gc);
+                updateComplexRectangleFields(firstPointRealField, firstPointImaginaryField,
+                                             secondPointRealField, secondPointImaginaryField);
             }
         });
 
@@ -312,6 +335,8 @@ public class GraphicalApp extends Application {
             if (currentlyDisplayed != null) {
                 currentlyDisplayed = currentlyDisplayed.translated(TranslationDirection.DOWN);
                 renderFractal(gc);
+                updateComplexRectangleFields(firstPointRealField, firstPointImaginaryField,
+                                             secondPointRealField, secondPointImaginaryField);
             }
         });
 

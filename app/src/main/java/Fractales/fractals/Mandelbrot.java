@@ -5,6 +5,9 @@ import org.apache.commons.math3.complex.Complex;
 import Fractales.utils.ComplexRectangle;
 import Fractales.utils.ComplexRectangle.TranslationDirection;
 
+/**
+ * The Mandelbrot set
+ */
 public class Mandelbrot extends Fractal {
 
 	public Mandelbrot(ComplexRectangle rect, double step, int max, int r) {
