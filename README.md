@@ -91,10 +91,8 @@ Elle renvoie la moyenne du temps d'éxécution de 5 répétitions de ./test.sh
 
 ![96564c83a699e2ff5ec579fcd3df8a19.png](:/c1a29b7340b944f88c1585f270a09dcb)
 
-
-
 ## Après parallelisation
 
 ![9467ae96cc3a1717ed4523686cccd7bf.png](:/5f4f790891ba450c812a640cd825c97e)
 
-![184774f1c94715006e1994b65d2bb23a.png](:/ca5ee6fec5e441d0add48efe4a4e2d67)
+Ce qui répresente une amélioration d'environ 240% du temps d'éxécution après la parallelisation de Renderer.
