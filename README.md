@@ -5,7 +5,6 @@
 Ce projet permet de créer et visualiser les fractales des ensembles Julia et Mandelbrot. Il possède une interface en ligne de commande qui sauvegarde la visualisation de la fractale dans une image et une interface graphique qui permet d'explorer la Fractale.
 
 # Documentation
-GUI
 La javadoc est accessible à la racine dans le dossier javadoc. Il est possible de la consulter en ouvrant javadoc/index.html dans un navigateur web.
 
 Sinon, pour construire la javadoc, lancer
