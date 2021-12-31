@@ -12,6 +12,10 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.10'
 }
 
+javadoc {
+    exclude "/org/apache/**"
+}
+
 
 javafx {
     version = "17"

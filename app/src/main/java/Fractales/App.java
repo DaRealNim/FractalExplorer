@@ -19,7 +19,13 @@ import Fractales.fractals.Mandelbrot;
 import Fractales.utils.ComplexRectangle;
 import javafx.application.Application;
 
-
+/**
+ * Main class. Contains the main function, parses the command line arguments, and either generates
+ * an image file, or starts the graphical Fractal Explorer application.
+ * 
+ * @see GraphicalApp
+ * @see Renderer
+ */
 public class App {
 
     private static double x1 = -2;
@@ -125,7 +131,13 @@ public class App {
     }
 
 
-
+    /**
+     * The main method, entry point of the program
+     * 
+     * @param args The command line options
+     * @throws ParseException   Throws this exception if something went wrong
+     *                          when parsing the command line options (invalid or missing argument...)
+     */
     public static void main(String[] args) throws ParseException {
         Options options = new Options();
         options.addOption(Option.builder("G")

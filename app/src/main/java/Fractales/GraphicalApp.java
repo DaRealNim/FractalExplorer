@@ -30,7 +30,9 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-
+/**
+ * The graphical version of the software, Fractal Explorer. Uses JavaFX for the GUI.
+ */
 public class GraphicalApp extends Application {
 
     Fractal currentlyDisplayed;
