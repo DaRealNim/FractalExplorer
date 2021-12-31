@@ -2,7 +2,7 @@ package Fractales;
 
 import org.apache.commons.math3.complex.Complex;
 
-import Fractales.colorthemes.DefaultColorTheme;
+import Fractales.colorthemes.*;
 import Fractales.fractals.Fractal;
 import Fractales.fractals.Julia;
 import Fractales.fractals.Mandelbrot;
@@ -34,19 +34,15 @@ import javafx.stage.Stage;
 public class GraphicalApp extends Application {
 
     Fractal currentlyDisplayed;
+    ColorTheme currentTheme;
     int zoomX;
     int zoomY;
 
     private final int SIZE = 800;
 
-    // public GraphicalApp(int size) {
-    //     super();
-    //     this.canvasSize = size;
-    // }
-
     private void renderFractal(GraphicsContext gc) {
         if (currentlyDisplayed != null) {
-            Image img = Renderer.drawFractal(currentlyDisplayed, new DefaultColorTheme());
+            Image img = Renderer.drawFractal(currentlyDisplayed, currentTheme);
 					  gc.drawImage(img, 0, 0);
         }
     }
@@ -95,6 +91,8 @@ public class GraphicalApp extends Application {
 
     @Override
     public void start(Stage stage) {
+
+        currentTheme = new DefaultColorTheme();
 
         //Panels principaux : zone de la fractale, et panel de contrôle
         HBox mainPane = new HBox();
@@ -150,12 +148,6 @@ public class GraphicalApp extends Application {
         VBox iterationsPanel = new VBox(3);
         iterationsPanel.getChildren().addAll(iterTitle, iterationsInputPanel);
 
-        Button generateButton = new Button("Generate");
-
-
-        // Zone exploration de la fractale
-        Text exploreTitle = newText("Explore current fractal", "subTitleText");
-
         Text displayedRectangleTitle = newText("Complex rectangle", "subSubTitleText");
         TextField firstPointRealField = new TextField("-2");
         TextField firstPointImaginaryField = new TextField("2");
@@ -175,6 +167,11 @@ public class GraphicalApp extends Application {
         // HBox rectButtonsPane = new HBox(3);
         // rectButtonsPane.getChildren().addAll(resetButton);
 
+
+        Button generateButton = new Button("Generate");
+
+        // Zone exploration de la fractale
+        Text exploreTitle = newText("Explore current fractal", "subTitleText");
         Button upButton = new Button("↑");
         Button downButton = new Button("↓");
         Button leftButton = new Button("←");
@@ -196,6 +193,14 @@ public class GraphicalApp extends Application {
         mvtAndZoomPane.setStyle("-fx-padding: 30 0 0 0;");
         movementPane.getChildren().addAll(mvtAndZoomPane);
 
+        Text colorThemeTitle = newText("Change color theme", "subTitleText");
+        Button defaultThemeButton = new Button("Colorful");
+        Button snowThemeButton = new Button("Snowy");
+        Button electricThemeButton = new Button("Electric");
+        HBox themeButtonPane = new HBox(10);
+        themeButtonPane.getChildren().addAll(defaultThemeButton, snowThemeButton, electricThemeButton);
+
+
         controlPane.addColumn(0, titleText,
                                  new Separator(),
                                  typeText,
@@ -207,7 +212,10 @@ public class GraphicalApp extends Application {
                                  generateButton,
                                  new Separator(),
                                  exploreTitle,
-                                 movementPane
+                                 movementPane,
+                                 new Separator(),
+                                 colorThemeTitle,
+                                 themeButtonPane
 
         );
         GridPane.setHalignment(titleText, HPos.CENTER);
@@ -301,6 +309,27 @@ public class GraphicalApp extends Application {
         downButton.setOnAction(event -> {
             if (currentlyDisplayed != null) {
                 currentlyDisplayed = currentlyDisplayed.translated(TranslationDirection.DOWN);
+                renderFractal(gc);
+            }
+        });
+
+        defaultThemeButton.setOnAction(event -> {
+            currentTheme = new DefaultColorTheme();
+            if (currentlyDisplayed != null) {
+                renderFractal(gc);
+            }
+        });
+
+        snowThemeButton.setOnAction(event -> {
+            currentTheme = new SnowColorTheme();
+            if (currentlyDisplayed != null) {
+                renderFractal(gc);
+            }
+        });
+
+        electricThemeButton.setOnAction(event -> {
+            currentTheme = new ElectricColorTheme();
+            if (currentlyDisplayed != null) {
                 renderFractal(gc);
             }
         });
