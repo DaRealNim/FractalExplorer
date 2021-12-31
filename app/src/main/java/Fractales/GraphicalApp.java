@@ -72,7 +72,7 @@ public class GraphicalApp extends Application {
             double y2 = Double.parseDouble(y2Field.getText());
             ComplexRectangle rect = new ComplexRectangle(x1, y1, x2, y2);
             if(!rect.isValidComplexSquare()) {
-                error.setText("Complex rectangle isn't a square, or second point\nis behind first point"+(Math.abs(x2-x1)-Math.abs(y2-y1)));
+                error.setText("Complex rectangle isn't a square, or second point\nis behind first point");
                 return null;
             }
                 
