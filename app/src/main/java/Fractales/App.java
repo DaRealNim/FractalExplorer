@@ -135,10 +135,8 @@ public class App {
      * The main method, entry point of the program
      * 
      * @param args The command line options
-     * @throws ParseException   Throws this exception if something went wrong
-     *                          when parsing the command line options (invalid or missing argument...)
      */
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) {
         Options options = new Options();
         options.addOption(Option.builder("G")
                                 .longOpt("graphical")
